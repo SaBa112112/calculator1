@@ -17,6 +17,8 @@ class MainActivity : AppCompatActivity() {
     private var text = ""
     private var number = ""
     private var point = "."
+    private var counterOP = 0
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -28,6 +30,7 @@ class MainActivity : AppCompatActivity() {
 
     fun numberClick (clickedView : View){
         if(clickedView is TextView){
+
             text = tvRes.text.toString()
             number = clickedView.text.toString()
             if(text == "0"){
@@ -55,6 +58,7 @@ class MainActivity : AppCompatActivity() {
             tvRes.text = ""
             operation = ""
             num1 = 0.0
+            counterOP = 0
         }
     }
 
@@ -77,21 +81,37 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun operationClick (clickedView: View){
-        if(clickedView is TextView){
-            num1 = tvRes.text.toString().toDouble()
+        if(clickedView is TextView) {
+
+            counterOP ++
+            if(counterOP < 2) {
+                num1 = tvRes.text.toString().toDouble()
+            }
+            else{
+                counterOP = 1
+            }
+
             operation = clickedView.text.toString()
+            operation = operation.takeLast(1)
+
             tvRes.text = ""
         }
     }
 
     fun equalsClick (clickedView: View){
         if(clickedView is TextView){
-            val num2 = tvRes.text.toString().toDouble() //tvRes.text aris meore ricxvi isev pirveli funqciidan
-            when(operation) {
-                "+" -> tvRes.text = (num1 + num2).toString()
-                "-" -> tvRes.text = (num1 - num2).toString()
-                "*" -> tvRes.text = (num1 * num2).toString()
-                "/" -> tvRes.text = (num1 / num2).toString()
+            if(tvRes.text == ""){
+                Toast.makeText(this, "არასწორი ჩანაწერი", Toast.LENGTH_SHORT ).show()
+                clearClick(clickedView)
+            }
+            else{
+                val num2 = tvRes.text.toString().toDouble() //tvRes.text aris meore ricxvi isev pirveli funqciidan
+                when(operation) {
+                    "+" -> tvRes.text = (num1 + num2).toString()
+                    "-" -> tvRes.text = (num1 - num2).toString()
+                    "*" -> tvRes.text = (num1 * num2).toString()
+                    "/" -> tvRes.text = (num1 / num2).toString()
+                }
             }
         }
     }
